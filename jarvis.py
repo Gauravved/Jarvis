@@ -33,7 +33,7 @@ def speak(voice):
 
 
 try:
-    setup = pd.read_csv('E:/Jarvis/setup.txt', sep='=', index_col=0, squeeze=True, header=None)
+    setup = pd.read_csv('E:/setup.txt', sep='=', index_col=0, squeeze=True, header=None)
     client_id = setup['client_id']
     client_secret = setup['client_secret']
     username = setup['username']
@@ -133,8 +133,7 @@ def sendEmail(sender, passowrd, to, msg):
 
 if __name__ == "__main__":
     wishMe()
-    webbrowser.register('chrome', None,
-                        webbrowser.BackgroundBrowser("C://Program Files//Google//Chrome//Application//chrome.exe"))
+    webbrowser.register('chrome', None,webbrowser.BackgroundBrowser("C://Program Files//Google//Chrome//Application//chrome.exe"))
     while True:
         query = ""
         if i == 0:

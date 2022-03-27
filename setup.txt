@@ -1,8 +1,0 @@
-client_id=3f05acd7c3d34bd2a97ed4f01db3f4dd
-client_secret=e68f91329d434f84aa9262870381bd2e
-device_name=LAPTOP-BMN9CRB5
-redirect_url=https://example.com/callback
-username=Gaurav
-scope=user-read-private user-read-playback-state user-modify-playback-state
-
-password=vedishere1353
