@@ -234,7 +234,7 @@ if __name__ == "__main__":
             query = query.replace("open spotify", "")
             speak("opening")
             webbrowser.get('chrome').open('open.spotify.com')
-            sleep(7)
+            sleep(10)
             press("space bar")
         if "send email" in query or "send an email" in query or "email" in query:
             sender = "panditved3@gmail.com"
