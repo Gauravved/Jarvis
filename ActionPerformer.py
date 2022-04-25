@@ -1,5 +1,4 @@
 from time import sleep
-from setuptools import setup
 import spotipy as sp
 from spotipy.oauth2 import SpotifyOAuth
 import pandas as pd
@@ -9,11 +8,10 @@ import speech_recognition as sr
 import wikipedia
 import webbrowser
 from keyboard import press
-from keyboard import press_and_release
 import winsound
 from GetSong import *
 import smtplib
-
+from prettytable import PrettyTable
 
 class ActionPerform:
     __engine = pyttsx3.init('sapi5')
@@ -21,7 +19,7 @@ class ActionPerform:
     __engine.setProperty('voice', voices[1].id)
     i = 0
     __setup = {}
-
+    __table = PrettyTable(["Srno.", "Searched Query","Time","Date"])
     def speak(self, voice):
         self.__engine.say(voice)
         self.__engine.runAndWait()
@@ -51,7 +49,7 @@ class ActionPerform:
                     deviceID = d['id']
                     break
         except Exception as e:
-            print("Net Not Available")
+            print("Net Not Available:",e)
             self.speak("Please Check your Internet Connection")
             exit()
 
@@ -122,7 +120,7 @@ class ActionPerform:
                     winsound.PlaySound("beep.wav", winsound.SND_ALIAS)
                     query = self.takeCommand().lower()
                 else:
-                    pass
+                    continue
             if query == "tell me the time" or query == "tell me time" or query == "time":
                 times = dt.datetime.now().strftime("%H:%M:%S")
                 print(times)
@@ -178,7 +176,7 @@ class ActionPerform:
                 else:
                     webbrowser.get('chrome').open(
                         "youtube.com/results?search_query=" + query)
-            if "open google" in query:
+            elif "open google" in query:
                 webbrowser.get('chrome').open("https://")
             elif "google" in query:
                 query = query.replace("google", "")
@@ -186,7 +184,7 @@ class ActionPerform:
                     webbrowser.get('chrome').open("https://")
                 else:
                     webbrowser.get('chrome').open("google.com/search?q=" + query)
-            if 'on spotify' in query:
+            elif 'on spotify' in query:
                 query = query.replace("on spotify", "")
                 if 'play' in query:
                     query = query.replace("play", "")
@@ -213,14 +211,14 @@ class ActionPerform:
                 # except Exception as e:
                 #     print(e)
                 #     speak("Could not get "+sname+" from spotify")
-            if "open spotify" in query:
+            elif "open spotify" in query:
                 query = query.replace("open spotify", "")
                 self.speak("opening")
                 webbrowser.get('chrome').open('open.spotify.com')
                 sleep(10)
                 press('enter')
                 press("space bar")
-            if "send email" in query or "send an email" in query or "email" in query:
+            elif "send email" in query or "send an email" in query or "email" in query:
                 sender = "panditved3@gmail.com"
                 password = self.setup["password"]
                 self.speak("Please enter email address of receiver")
@@ -243,14 +241,38 @@ class ActionPerform:
                     self.speak("Sorry I didn't hear that correctly please type the content")
                     msg = input("Enter the mail body:")
                 self.sendEmail(sender, password, receiver, msg)
-            if "hello" == query or "hi" == query:
+            elif "hello" == query or "hi" == query:
                 print("Hey There How are you!!")
                 self.speak("Hey There. How are you!!")
-                i = -1
-            if "i am fine" in query or "how are you" in query:
+                self.i = -1
+            elif "i am fine" in query or "how are you" in query:
                 print("I am fine. Thank you for being concerned")
                 self.speak("I am fine. Thank you for being concerned")
-            if query == "exit" or query == "bye" or query == "good bye" or query == "goodbye" or query == "please leave":
+            elif query == "exit" or query == "bye" or query == "good bye" or query == "goodbye" or query == "please leave":
                 self.speak("Good Bye Sir")
                 exit()
+            elif "search history" in query:
+                file = open("history.txt","r")
+                k=1
+                if "today" in query or "todays" in query or "today's" in query:
+                    for x in file:
+                        column = x.split("|")
+                        if str(column[2]) == str(dt.datetime.now().strftime("%d-%B-%Y")+"\n"):
+                            print("Hello")
+                            column.insert(0,k)
+                            self.__table.add_row(column)
+                            k+=1
+                else:   
+                    for x in file:
+                        column = x.split("|")
+                        column.insert(0,k)
+                        self.__table.add_row(column)
+                        k+=1
+                print(self.__table)
+                self.__table.clear_rows()
+            else:
+                webbrowser.get('chrome').open("google.com/search?q="+query)
             self.i += 1
+            if "search history" not in query:
+                with open("history.txt","a") as file:
+                    file.write(query + "|" + dt.datetime.now().strftime("%H:%M:%S") + "|" + dt.datetime.now().strftime('%d-%B-%Y') +"\n")
