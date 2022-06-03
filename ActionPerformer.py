@@ -18,7 +18,7 @@ class ActionPerform:
     voices = __engine.getProperty('voices')
     __engine.setProperty('voice', voices[1].id)
     i = 0
-    __setup = {}
+    setup = {}
     __table = PrettyTable(["Srno.", "Searched Query","Time","Date"])
     def speak(self, voice):
         self.__engine.say(voice)
@@ -73,12 +73,12 @@ class ActionPerform:
             return "None"
         return query
 
-    def sendEmail(self, sender, passowrd, to, msg):
+    def sendEmail(self, sender, password, to, msg):
         servers = smtplib.SMTP('smtp.gmail.com', 587)
         try:
             servers.ehlo()
             servers.starttls()
-            servers.login(sender, passowrd)
+            servers.login(sender, password)
             servers.sendmail(sender, to, msg)
             print("Sent Email")
             self.speak("Email Sent Successfully")
